@@ -1,0 +1,184 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is content moderation service.",
+        "title": "Content Moderation Service",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/sensitive-words": {
+            "post": {
+                "description": "AddSensitiveWordHandler handles the addition of a new sensitive word.\nIt receives a request with a word that needs to be added to the list of sensitive words.\nThe request body is a JSON object with one field: \"word\".\nExample: { \"word\": \"badword1\" }",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sensitive-words"
+                ],
+                "summary": "Add a new sensitive word",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.AddSensitiveWordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sensitive-words/validate": {
+            "post": {
+                "description": "ValidateHandler handles the /validate endpoint.\nIt receives a request with keywords and checks if they match any sensitive words.\nIt returns the matched sensitive words and the count of matches.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sensitive-words"
+                ],
+                "summary": "Validate keywords against sensitive words",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.ValidateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.ValidateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sensitive-words/{id}": {
+            "delete": {
+                "description": "DeleteSensitiveWordHandler handles the deletion of a sensitive word by ID.\nIt receives a request with the ID of the sensitive word that needs to be deleted.",
+                "tags": [
+                    "sensitive-words"
+                ],
+                "summary": "Delete a sensitive word by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Sensitive word ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.AddSensitiveWordRequest": {
+            "type": "object",
+            "properties": {
+                "word": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.ValidateRequest": {
+            "description": "ValidateRequest represents the request body for the /validate endpoint. It contains a keyword that needs to be validated against sensitive words. The request body is a JSON object with one field: \"keyword\". Example: { \"keyword\": \"This is a badword1 example.\" }",
+            "type": "object",
+            "properties": {
+                "keyword": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.ValidateResponse": {
+            "description": "ValidateResponse represents the response body for the /validate endpoint. It contains a list of sensitive words that were matched and the count of matches. The response body is a JSON object with two fields: \"sensitive_words\" and \"match_count\". Example: { \"sensitive_words\": [\"badword1\"], \"match_count\": 1 }",
+            "type": "object",
+            "properties": {
+                "match_count": {
+                    "type": "integer"
+                },
+                "sensitive_words": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
+    }
+}

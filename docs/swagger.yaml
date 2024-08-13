@@ -1,0 +1,138 @@
+basePath: /api/v1
+definitions:
+  api.AddSensitiveWordRequest:
+    properties:
+      word:
+        type: string
+    type: object
+  api.ValidateRequest:
+    description: 'ValidateRequest represents the request body for the /validate endpoint.
+      It contains a keyword that needs to be validated against sensitive words. The
+      request body is a JSON object with one field: "keyword". Example: { "keyword":
+      "This is a badword1 example." }'
+    properties:
+      keyword:
+        type: string
+    type: object
+  api.ValidateResponse:
+    description: 'ValidateResponse represents the response body for the /validate
+      endpoint. It contains a list of sensitive words that were matched and the count
+      of matches. The response body is a JSON object with two fields: "sensitive_words"
+      and "match_count". Example: { "sensitive_words": ["badword1"], "match_count":
+      1 }'
+    properties:
+      match_count:
+        type: integer
+      sensitive_words:
+        items:
+          type: string
+        type: array
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is content moderation service.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Content Moderation Service
+  version: "1.0"
+paths:
+  /sensitive-words:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        AddSensitiveWordHandler handles the addition of a new sensitive word.
+        It receives a request with a word that needs to be added to the list of sensitive words.
+        The request body is a JSON object with one field: "word".
+        Example: { "word": "badword1" }
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.AddSensitiveWordRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Add a new sensitive word
+      tags:
+      - sensitive-words
+  /sensitive-words/{id}:
+    delete:
+      description: |-
+        DeleteSensitiveWordHandler handles the deletion of a sensitive word by ID.
+        It receives a request with the ID of the sensitive word that needs to be deleted.
+      parameters:
+      - description: Sensitive word ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Delete a sensitive word by ID
+      tags:
+      - sensitive-words
+  /sensitive-words/validate:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        ValidateHandler handles the /validate endpoint.
+        It receives a request with keywords and checks if they match any sensitive words.
+        It returns the matched sensitive words and the count of matches.
+      parameters:
+      - description: Request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.ValidateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.ValidateResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      summary: Validate keywords against sensitive words
+      tags:
+      - sensitive-words
+swagger: "2.0"
