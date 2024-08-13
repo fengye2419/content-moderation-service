@@ -50,16 +50,16 @@ This file is the Go module file that specifies the project's dependencies.
 
 ## Usage
 
-To use the content moderation service, you can send a POST request to the `/validate` endpoint with a JSON payload containing the keywords to be validated. The service will respond with the matched sensitive words and the count of matches.
+To use the content moderation service, you can send a POST request to the `/api/v1/sensitiveWords/validate` endpoint with a JSON payload containing the keywords to be validated. The service will respond with the matched sensitive words and the count of matches.
 
 Example request:
 
 ```
-POST /validate
+POST /api/v1/sensitiveWords/validate
 Content-Type: application/json
 
 {
-  "keywords": ["keyword1", "keyword2", "keyword3"]
+  "keyword": "keyword1"
 }
 ```
 
